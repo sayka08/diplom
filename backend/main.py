@@ -1,9 +1,34 @@
-from binance.client import Client
+from fastapi import FastAPI, Depends
+from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from dotenv import load_dotenv
+from backend.db.models.user import Base
+from backend.api.v1.endpoints import auth
+import os
 
-API_KEY = "H41KUAh7MBiCmOAB9Ek06BHrOlHFmzg8yudmF2kHDZKgQkiTkPdf6L4X6WKxsHPs"
-API_SECRET = "yl08bT6WojwAi2pJtjyy1TW2HLpykQPI7jvVhtxbqH0aNpBqkCrptjX6uA9Dw4az"
+load_dotenv()
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-client = Client(API_KEY, API_SECRET)
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-price = client.get_symbol_ticker(symbol="BTCUSDT")
-print(f"Текущая цена BTC: {price['price']}")
+Base.metadata.create_all(bind=engine)
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/login")
+
+app = FastAPI(
+    title="Blog API",
+    description="API для блога с аутентификацией",
+    openapi_tags=[{"name": "auth", "description": "Аутентификация"}]
+)
+
+app.include_router(auth.router, prefix="/api/v1", tags=["auth"])
+
+@app.get("/", dependencies=[Depends(oauth2_scheme)])
+async def root():
+    return {"message": "Hello, world!"}
+
+@app.get("/test")
+async def test():
+    return {"message": "Test works!"}
