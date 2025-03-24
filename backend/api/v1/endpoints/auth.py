@@ -76,3 +76,5 @@ async def login(user: UserLogin, db: Session = Depends(get_db)):
 @router.get("/me")
 async def read_users_me(current_user: User = Depends(get_current_user)):
     return {"username": current_user.username}
+
+# Новый комментарий для теста PR
