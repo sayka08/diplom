@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from backend.db.models.user import User
+from backend.db.session import get_db
 from backend.schemas.auth import UserCreate, UserLogin
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
@@ -17,14 +18,6 @@ load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
-def get_db():
-    from backend.main import SessionLocal
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 def create_access_token(data: dict):
     to_encode = data.copy()
