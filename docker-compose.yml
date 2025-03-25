@@ -1,0 +1,29 @@
+services:
+  backend:
+    build: .
+    container_name: backend
+    env_file:
+      - .env
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/backend
+    restart: always
+
+  db:
+    image: postgres:16
+    container_name: backend-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: diplomAldik
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  pgdata:
