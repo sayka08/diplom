@@ -11,17 +11,9 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/login")
 @router.post("/register")
 async def register(user: UserCreate, db: Session = Depends(get_db)):
     new_user = register_user(db, user.username, user.password)
-    return {"message": "User registered", "username": new_user.username}
+    return {"message": "User registered seccuessfully", "username": new_user.username}
 
 @router.post("/login")
 async def login(user: UserLogin, db: Session = Depends(get_db)):
     token = login_user(db, user.username, user.password)
-    return {"access_token": token, "token_type": "bearer"}
-
-@router.get("/me")
-async def read_users_me(
-    db: Session = Depends(get_db),
-    token: str = Depends(oauth2_scheme)
-):
-    current_user = get_current_user(db, token)
-    return {"username": current_user.username}
+    return {"message": "User logged in successfully", "access_token": token, "token_type": "bearer"}
