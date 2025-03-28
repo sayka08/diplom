@@ -8,12 +8,26 @@ from fastapi.security import OAuth2PasswordBearer
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/login")
 
-@router.post("/register")
+@router.post("/register", tags=["auth"])
 async def register(user: UserCreate, db: Session = Depends(get_db)):
     new_user = register_user(db, user.username, user.password)
-    return {"message": "User registered seccuessfully", "username": new_user.username}
+    return {
+        "message": "User registered seccuessfully",
+        "id": new_user.id,
+        "username": new_user.username
+    }
 
-@router.post("/login")
+@router.post("/login", tags=["auth"])
 async def login(user: UserLogin, db: Session = Depends(get_db)):
     token = login_user(db, user.username, user.password)
-    return {"message": "User logged in successfully", "access_token": token, "token_type": "bearer"}
+    current_user = get_current_user(db, token)
+    return {
+        "message": "User logged in successfully",
+        "id": current_user.id,
+        "access_token": token,
+        "token_type": "bearer"
+    }
+
+@router.post("/logout", tags=["auth"])
+async def logout():
+    return {"message": "User logged out successfully"}
