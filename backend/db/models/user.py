@@ -1,9 +1,8 @@
 from sqlalchemy import Column, String, Integer, DateTime
-from sqlalchemy.ext.declarative import declarative_base
+from backend.db.base import Base  # Импортируем Base
 from sqlalchemy import Date
 from datetime import datetime
 
-Base = declarative_base()
 
 class User(Base):
     __tablename__ = "users"
