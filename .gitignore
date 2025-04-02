@@ -66,3 +66,6 @@ pnpm-lock.yaml
 # Temp files
 .DS_Store
 Thumbs.db
+
+alembic.ini
+alembic
