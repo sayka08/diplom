@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
 from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship
 from datetime import datetime
 from backend.db.base import Base
 
@@ -14,3 +15,4 @@ class Post(Base):
     views = Column(Integer, default=0)
     comments_count = Column(Integer, default=0)
     likes_count = Column(Integer, default=0)
+    likes = relationship("Like", backref="post", lazy="dynamic")
