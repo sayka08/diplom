@@ -29,7 +29,7 @@ async def read_users_me(
             "email": current_user.email,
             "created_at": current_user.created_at
         }
-    except Exception as e:
+    except Exception:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials"
