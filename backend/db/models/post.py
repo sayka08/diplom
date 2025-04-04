@@ -16,3 +16,5 @@ class Post(Base):
     comments_count = Column(Integer, default=0)
     likes_count = Column(Integer, default=0)
     likes = relationship("Like", backref="post", lazy="dynamic")
+    comments_count = Column(Integer, default=0)
+    comments = relationship("Comment", backref="post", cascade="all, delete")
