@@ -1,13 +1,13 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap'
+// frontend/src/main.js
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router/index.js';
+import api from './api';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap';
+import './assets/base.css';
 
-
-import router from './router/index.js'
-
-const app = createApp(App)
-
-app.use(router)
-
-app.mount('#app')
+const app = createApp(App);
+app.use(router);
+app.config.globalProperties.$axios = api;
+app.mount('#app');

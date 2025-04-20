@@ -1,3 +1,4 @@
+# backend/api/v1/endpoints/users.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
@@ -35,7 +36,7 @@ async def read_users_me(
             detail="Could not validate credentials"
         )
 
-@router.get("/{user_id}", tags=["users"], status_code=status.HTTP_200_OK)
+@router.get("/users/{user_id}", tags=["users"], status_code=status.HTTP_200_OK)  # Изменено на /users/{user_id}
 async def get_user(user_id: int, db: Session = Depends(get_db)):
     user = get_user_by_id(db, user_id)
     if not user:
@@ -55,7 +56,7 @@ async def get_user(user_id: int, db: Session = Depends(get_db)):
         "created_at": user.created_at
     }
 
-@router.put("/{user_id}", tags=["users"], status_code=status.HTTP_200_OK)
+@router.put("/users/{user_id}", tags=["users"], status_code=status.HTTP_200_OK)  # Изменено на /users/{user_id}
 async def update_user_endpoint(
     user_id: int,
     user_update: UserUpdate,

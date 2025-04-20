@@ -1,8 +1,9 @@
+# backend/api/v1/endpoints/posts.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
 from backend.db.session import get_db
-from backend.services.post_service import create_post_service, get_post_service
+from backend.services.post_service import create_post_service, get_post_service, get_posts_service
 from backend.schemas.post import PostCreate, PostResponse
 from backend.services.auth_service import get_current_user
 
@@ -23,7 +24,7 @@ async def create_post(
             post_data.description
         )
     except Exception as e:
-        return {"Error occured: ", e}
+        return {"Error occurred: ": str(e)}
 
 @router.get("/posts/{post_id}", response_model=PostResponse, tags=["posts"])
 async def read_post(
@@ -36,4 +37,15 @@ async def read_post(
             post_id
         )
     except Exception as e:
-        return {"Error occured: ", e}
+        return {"Error occurred: ": str(e)}
+
+@router.get("/posts", response_model=list[PostResponse], tags=["posts"])
+async def read_posts(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db)
+):
+    try:
+        return get_posts_service(db, skip, limit)
+    except Exception as e:
+        return {"Error occurred: ": str(e)}

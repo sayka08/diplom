@@ -21,6 +21,7 @@ async def register(user: UserCreate, db: Session = Depends(get_db)):
         }
     )
 
+# backend/api/v1/endpoints/auth.py
 @router.post("/login", tags=["auth"])
 async def login(user: UserLogin, db: Session = Depends(get_db)):
     token = login_user(db, user.username, user.password)
